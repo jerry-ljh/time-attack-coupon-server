@@ -5,6 +5,8 @@ plugins {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.redisson:redisson-spring-boot-starter:3.16.4")
     implementation("org.springframework.boot:spring-boot-configuration-processor")
     api("com.querydsl:querydsl-jpa")
     implementation("com.querydsl:querydsl-apt::jpa")
