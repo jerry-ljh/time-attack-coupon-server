@@ -14,7 +14,7 @@ class UserRepository(
 ) : UserJpaRepository by userJpaRepository {
 
     fun batchInsert(users: Collection<User>) {
-        users.chunked(1000).forEach { chunkedUserList ->
+        users.chunked(5000).forEach { chunkedUserList ->
             jdbcTemplate.batchUpdate("insert into users(user_id) values(?)",
                 object : BatchPreparedStatementSetter {
                     override fun setValues(ps: PreparedStatement, i: Int) {
