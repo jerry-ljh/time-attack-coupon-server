@@ -12,4 +12,8 @@ class UserService(
     fun saveAllUser(users: Collection<User>) {
         return userRepository.batchInsert(users)
     }
+
+    fun findAll(): List<User> {
+        return userRepository.findAll()
+    }
 }
