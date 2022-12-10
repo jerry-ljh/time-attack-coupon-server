@@ -69,7 +69,7 @@ class RedisRepositoryTest(
     }
 
     @Test
-    fun `zRange 집합에서 원소의 startRank 이상 endRank 미만의 값이 출력한다`() {
+    fun `zRange 집합에서 원소의 startRank 이상 endRank 이하의 값이 출력된다`() {
         // given
         val value1 = "test value1"
         val value2 = "test value2"
