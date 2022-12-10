@@ -10,5 +10,6 @@ import org.springframework.context.annotation.Import
 class CouponApiApplication
 
 fun main(args: Array<String>) {
+    System.setProperty("spring.config.name", "application,application-domain")
     runApplication<CouponApiApplication>(*args)
 }
