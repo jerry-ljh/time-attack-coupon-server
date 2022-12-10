@@ -12,5 +12,6 @@ import org.springframework.context.annotation.Import
 class CouponBatchApplication
 
 fun main(args: Array<String>) {
+    System.setProperty("spring.config.name", "application,application-domain")
     runApplication<CouponBatchApplication>(*args)
 }
