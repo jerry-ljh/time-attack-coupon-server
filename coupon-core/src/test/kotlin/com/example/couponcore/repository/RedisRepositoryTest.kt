@@ -69,6 +69,32 @@ class RedisRepositoryTest(
     }
 
     @Test
+    fun `zAdd 같은 value, 다른 score라면 score가 최신으로 업데이트된다`() {
+        // given
+        val value = "test value"
+        val score1 = .2
+        val score2 = .1
+        // when
+        redisRepository.zAdd(key, value, score1)
+        redisRepository.zAdd(key, value, score2)
+        // then
+        redisTemplate.opsForZSet().score(key, value) shouldBe score2
+    }
+
+    @Test
+    fun `zAddIfAbsent 같은 value, 다른 score라면 업데이트 하지않고 무시된다`() {
+        // given
+        val value = "test value"
+        val score1 = .2
+        val score2 = .1
+        // when
+        redisRepository.zAddIfAbsent(key, value, score1)
+        redisRepository.zAddIfAbsent(key, value, score2)
+        // then
+        redisTemplate.opsForZSet().score(key, value) shouldBe score1
+    }
+
+    @Test
     fun `zRange 집합에서 원소의 startRank 이상 endRank 이하의 값이 출력된다`() {
         // given
         val value1 = "test value1"
@@ -78,7 +104,7 @@ class RedisRepositoryTest(
         redisRepository.zAdd(key, value2, score = 0.2)
         redisRepository.zAdd(key, value3, score = 0.3)
         // when
-        val result = redisRepository.zRange(key, startRank = 1, endRank = 2)
+        val result = redisRepository.zRange(key, startRank = 1, endRank = 2, String::class.java)
         // then
         result shouldBe setOf(value2, value3)
     }
