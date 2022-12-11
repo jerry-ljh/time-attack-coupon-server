@@ -27,7 +27,7 @@ class CouponIssueService(
     }
 
     fun markIssueStatus(key: String, userId: String): Boolean {
-        if (getCouponIssueCount(key) >= getIssuableCouponCount(key)) return false
+        if (getCouponIssueCount(key) >= getTotalCouponQuantity(key)) return false
         val isSuccessIssueTrueMarking = addIssueMarking(key, userId)
         if (isSuccessIssueTrueMarking.not()) {
             log.info("key : $key , userId: $userId 발급 마킹 실패 (중복 요청)")
@@ -40,7 +40,7 @@ class CouponIssueService(
         return redisRepository.sCard(key)!!
     }
 
-    fun getIssuableCouponCount(key: String): Long {
+    fun getTotalCouponQuantity(key: String): Long {
         return couponPolicyService.findCouponPolicy(key).quantity
     }
 
