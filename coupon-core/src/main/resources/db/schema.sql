@@ -6,7 +6,7 @@ CREATE TABLE `coupon`.`coupon_policies`
     `issued_quantity`  bigint(20) NOT NULL comment '발행된 쿠폰 수',
     `date_issue_start` datetime(6) NOT NULL comment '발행 시작 일시',
     `date_issue_end`   datetime(6) NOT NULL comment '발행 종료 일시',
-    `date_expired`     datetime(6) NOT NULL comment '만료 일시',
+    `date_expire`      datetime(6) NOT NULL comment '만료 일시',
     PRIMARY KEY (`id`),
     KEY                `title` (`title`)
 ) ENGINE = InnoDB
@@ -19,10 +19,13 @@ CREATE TABLE `coupon`.`user_coupon_policy_mappings`
     `coupon_policy_id` bigint(20) NOT NULL comment '쿠폰 정책 ID',
     `user_id`          varchar(255) NOT NULL comment '유저 ID',
     `date_issued`      datetime(6) NOT NULL comment '발행 일시',
-    `date_expired`     datetime(6) NOT NULL comment '만료 일시',
+    `date_expire`      datetime(6) NOT NULL comment '만료 일시',
     `date_used`        datetime(6) NULL comment '사용 일시',
     PRIMARY KEY (`id`),
     KEY                `user_id_coupon_policy_id` (`user_id`, `coupon_policy_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
     COMMENT '유저 쿠폰 정책 매핑 정보';
+
+insert into coupon_policies(title, quantity, issued_quantity, date_issue_start, date_issue_end,
+                            date_expire) value ('TIME_SALE', 10000, 0, now(), now() + interval 1 day, now() + interval 1 day)
