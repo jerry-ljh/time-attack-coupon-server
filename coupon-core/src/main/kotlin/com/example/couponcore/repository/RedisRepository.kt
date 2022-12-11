@@ -31,4 +31,16 @@ class RedisRepository(
     fun zSize(key: String): Long? {
         return redisTemplate.opsForZSet().size(key)
     }
+
+    fun sAdd(key: String, value: Any): Long? {
+        return redisTemplate.opsForSet().add(key, value)
+    }
+
+    fun sRem(key: String, value: Any): Long? {
+        return redisTemplate.opsForSet().remove(key, value)
+    }
+
+    fun sCard(key: String): Long? {
+        return redisTemplate.opsForSet().size(key)
+    }
 }
