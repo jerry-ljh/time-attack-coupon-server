@@ -85,4 +85,3 @@ class WaitingQueueServiceTest(
 
     data class TestUserDto(val userId: String)
 }
-

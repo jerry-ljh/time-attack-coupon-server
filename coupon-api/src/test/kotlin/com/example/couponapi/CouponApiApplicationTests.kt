@@ -9,5 +9,4 @@ class CouponApiApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }

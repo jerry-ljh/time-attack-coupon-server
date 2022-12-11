@@ -9,5 +9,4 @@ class CouponBatchApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }
