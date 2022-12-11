@@ -14,7 +14,7 @@ class WaitingQueueController(
     @PostMapping("/queue")
     fun registerQueue(@RequestBody waitingQueueRequestDto: WaitingQueueRequestDto): Boolean {
         val result = waitingQueueService.registerQueue(
-            key = waitingQueueRequestDto.couponCode.name,
+            key = waitingQueueRequestDto.couponTitle,
             value = waitingQueueRequestDto.userId
         )
         return result ?: false
