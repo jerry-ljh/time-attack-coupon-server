@@ -24,6 +24,12 @@ class RedisRepository(
             ?.toSet()
     }
 
+    fun <T : Any> zPopMin(key: String, count: Long, type: Class<T>): Set<T>? {
+        return redisTemplate.opsForZSet().popMin(key, count)
+            ?.map { objectMapper.convertValue(it, type) }
+            ?.toSet()
+    }
+
     fun zRank(key: String, value: Any): Long? {
         return redisTemplate.opsForZSet().rank(key, value)
     }

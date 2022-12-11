@@ -21,4 +21,8 @@ class WaitingQueueService(
     fun <T : Any> getQueue(key: String, startRank: Long = 0, endRank: Long, type: Class<T>): Queue<T> {
         return LinkedList(redisRepository.zRange(key, startRank, endRank, type) ?: emptySet())
     }
+
+    fun <T : Any> popQueue(key: String, count: Long, type: Class<T>): Queue<T> {
+        return LinkedList(redisRepository.zPopMin(key, count, type) ?: emptySet())
+    }
 }
