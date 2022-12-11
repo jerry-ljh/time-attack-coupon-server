@@ -1,23 +1,17 @@
 package com.example.couponcore.service
 
-import com.example.couponcore.CoreConfigurationLoader
+import com.example.couponcore.TestConfig
 import com.example.couponcore.repository.RedisRepository
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.TestConstructor
 
-@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
-@ActiveProfiles("test")
-@SpringBootTest(classes = [CoreConfigurationLoader::class])
 class WaitingQueueServiceTest(
     private val waitingQueueService: WaitingQueueService,
     private val redisRepository: RedisRepository,
     private val redisTemplate: RedisTemplate<String, Any>
-) {
+) : TestConfig() {
 
     @AfterEach
     fun deleteAllKey() {

@@ -20,13 +20,13 @@ class RedisRepository(
 
     fun <T : Any> zRange(key: String, startRank: Long, endRank: Long, type: Class<T>): Set<T>? {
         return redisTemplate.opsForZSet().range(key, startRank, endRank)
-            ?.map { objectMapper.convertValue(it, type) }
+            ?.map { type.cast(it) }
             ?.toSet()
     }
 
     fun <T : Any> zPopMin(key: String, count: Long, type: Class<T>): Set<T>? {
         return redisTemplate.opsForZSet().popMin(key, count)
-            ?.map { objectMapper.convertValue(it, type) }
+            ?.map { type.cast(it) }
             ?.toSet()
     }
 

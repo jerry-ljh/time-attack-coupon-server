@@ -1,5 +1,8 @@
 package com.example.couponcore.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -27,11 +30,21 @@ class RedisConfiguration {
     @Bean
     fun redisTemplate(): RedisTemplate<String, Any> {
         val redisTemplate = RedisTemplate<String, Any>()
+        val serializer = GenericJackson2JsonRedisSerializer(
+            jacksonObjectMapper()
+                .registerModule(JavaTimeModule())
+                .activateDefaultTyping(
+                    BasicPolymorphicTypeValidator.builder()
+                        .allowIfBaseType(Any::class.java)
+                        .build(), ObjectMapper.DefaultTyping.EVERYTHING
+                )
+
+        )
         redisTemplate.setConnectionFactory(redisConnectionFactory())
         redisTemplate.keySerializer = StringRedisSerializer()
-        redisTemplate.valueSerializer = GenericJackson2JsonRedisSerializer(jacksonObjectMapper())
+        redisTemplate.valueSerializer = serializer
         redisTemplate.hashKeySerializer = StringRedisSerializer()
-        redisTemplate.hashValueSerializer = GenericJackson2JsonRedisSerializer(jacksonObjectMapper())
+        redisTemplate.hashValueSerializer = serializer
         return redisTemplate
     }
 }
