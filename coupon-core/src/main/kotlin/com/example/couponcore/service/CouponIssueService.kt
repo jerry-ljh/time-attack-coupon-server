@@ -14,16 +14,15 @@ class CouponIssueService(
 
     private val log = LoggerFactory.getLogger(this::class.simpleName)
 
-
     fun issue(key: String, userId: String) {
-        val remainCoupon = distributedLockService.executeWithLock(
+        val issuable = distributedLockService.executeWithLock(
             lockName = "${key}_issue_lock",
             waitSeconds = 3,
             leaseSeconds = 3
         ) {
             markIssueStatus(key, userId)
         }
-        if (remainCoupon) syncCouponIssueStatus(userId, key)
+        if (issuable) syncCouponIssueStatus(key, userId)
     }
 
     fun markIssueStatus(key: String, userId: String): Boolean {
@@ -33,7 +32,6 @@ class CouponIssueService(
             log.info("key : $key , userId: $userId 발급 마킹 실패 (중복 요청)")
         }
         return isSuccessIssueTrueMarking
-
     }
 
     fun getCouponIssueCount(key: String): Long {
@@ -54,7 +52,7 @@ class CouponIssueService(
         return redisRepository.sRem(key, userId) == 1L
     }
 
-    fun syncCouponIssueStatus(userId: String, couponTitle: String) {
+    fun syncCouponIssueStatus(couponTitle: String, userId: String) {
         try {
             userCouponPolicyMappingService.saveUserCouponPolicyMapping(userId, couponTitle)
         } catch (e: Exception) {
