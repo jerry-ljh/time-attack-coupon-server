@@ -36,9 +36,9 @@ class RedisConfiguration {
                 .activateDefaultTyping(
                     BasicPolymorphicTypeValidator.builder()
                         .allowIfBaseType(Any::class.java)
-                        .build(), ObjectMapper.DefaultTyping.EVERYTHING
+                        .build(),
+                    ObjectMapper.DefaultTyping.EVERYTHING
                 )
-
         )
         redisTemplate.setConnectionFactory(redisConnectionFactory())
         redisTemplate.keySerializer = StringRedisSerializer()

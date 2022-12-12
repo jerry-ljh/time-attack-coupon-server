@@ -6,7 +6,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.springframework.data.redis.core.RedisTemplate
 
-
 class RedisRepositoryTest(
     private val redisRepository: RedisRepository,
     private val redisTemplate: RedisTemplate<String, Any>

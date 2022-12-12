@@ -23,7 +23,6 @@ class CouponIssueJobConfiguration(
     private val couponPolicyService: CouponPolicyService
 ) {
 
-
     @Bean
     fun couponIssueJob(couponIssueStep: Step): Job {
         return jobBuilderFactory["couponIssueJob"]
@@ -53,5 +52,4 @@ class CouponIssueJobConfiguration(
         executor.initialize()
         return executor
     }
-
 }
