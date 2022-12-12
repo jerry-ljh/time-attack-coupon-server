@@ -35,6 +35,10 @@ class CouponPolicyRepository(
                 )
             ).fetchOne()
     }
+
+    fun getProxy(id: Long): CouponPolicy {
+        return couponPolicyJpaRepository.getReferenceById(id)
+    }
 }
 
 interface CouponPolicyJpaRepository : JpaRepository<CouponPolicy, Long>

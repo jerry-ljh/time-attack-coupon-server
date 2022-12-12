@@ -20,6 +20,6 @@ class CouponPolicyService(
     }
 
     fun getCouponPolicyProxy(id: Long): CouponPolicy {
-        return couponPolicyRepository.getReferenceById(id)
+        return couponPolicyRepository.getProxy(id)
     }
 }

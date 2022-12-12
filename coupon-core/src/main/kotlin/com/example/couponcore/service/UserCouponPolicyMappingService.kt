@@ -13,9 +13,9 @@ class UserCouponPolicyMappingService(
 ) {
 
     @Transactional
-    fun saveUserCouponPolicyMapping(userId: String, couponTitle: String) {
+    fun saveUserCouponPolicyMapping(userId: String, couponTitle: String): UserCouponPolicyMapping {
         val couponPolicyDto = couponPolicyService.findCouponPolicy(couponTitle)
-        userCouponPolicyMappingRepository.save(
+        return userCouponPolicyMappingRepository.save(
             UserCouponPolicyMapping(
                 userId = userId,
                 couponPolicy = couponPolicyService.getCouponPolicyProxy(couponPolicyDto.id),
