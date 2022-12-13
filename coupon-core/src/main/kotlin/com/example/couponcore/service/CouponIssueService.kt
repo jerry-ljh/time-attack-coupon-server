@@ -24,16 +24,17 @@ class CouponIssueService(
             waitSeconds = 3,
             leaseSeconds = 3
         ) {
-            markIssueStatus(getIssuedCouponSetKey(key), userId)
+            markIssueStatus(key, userId)
         }
         if (issuable) syncCouponIssueStatus(key, userId)
     }
 
     fun markIssueStatus(key: String, userId: String): Boolean {
-        if (getCouponIssueCount(key) >= getTotalCouponQuantity(key)) return false
-        val isSuccessIssueTrueMarking = addIssueMarking(key, userId)
+        val issuedCouponSetKey = getIssuedCouponSetKey(key)
+        if (getCouponIssueCount(issuedCouponSetKey) >= getTotalCouponQuantity(key)) return false
+        val isSuccessIssueTrueMarking = addIssueMarking(issuedCouponSetKey, userId)
         if (isSuccessIssueTrueMarking.not()) {
-            log.info("key : $key , userId: $userId 발급 마킹 실패 (중복 요청)")
+            log.info("key : $issuedCouponSetKey , userId: $userId 발급 마킹 실패 (중복 요청)")
         }
         return isSuccessIssueTrueMarking
     }

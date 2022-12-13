@@ -39,7 +39,7 @@ class CouponIssueServiceTest(
         val result = couponIssueService.markIssueStatus(key, userId)
         // then
         result shouldBe true
-        val issuedCouponUserSet = redisTemplate.opsForSet().members(key)!!
+        val issuedCouponUserSet = redisTemplate.opsForSet().members(CouponIssueService.getIssuedCouponSetKey(key))!!
         issuedCouponUserSet.first() shouldBe userId
     }
 
@@ -48,10 +48,11 @@ class CouponIssueServiceTest(
         // given
         val key = "TEST_COUPON_TITLE"
         val userId = "jerry"
+        val issuedCouponSetKey = CouponIssueService.getIssuedCouponSetKey(key)
         saveCouponPolicy(title = key, quantity = 3)
-        redisRepository.sAdd(key, "eliot")
-        redisRepository.sAdd(key, "ben")
-        redisRepository.sAdd(key, "con")
+        redisRepository.sAdd(issuedCouponSetKey, "eliot")
+        redisRepository.sAdd(issuedCouponSetKey, "ben")
+        redisRepository.sAdd(issuedCouponSetKey, "con")
         // when
         val result = couponIssueService.markIssueStatus(key, userId)
         // then
@@ -63,8 +64,9 @@ class CouponIssueServiceTest(
         // given
         val key = "TEST_COUPON_TITLE"
         val userId = "jerry"
+        val issuedCouponSetKey = CouponIssueService.getIssuedCouponSetKey(key)
         saveCouponPolicy(title = key, quantity = 3)
-        redisRepository.sAdd(key, "jerry")
+        redisRepository.sAdd(issuedCouponSetKey, "jerry")
         // when
         val result = couponIssueService.markIssueStatus(key, userId)
         // then
