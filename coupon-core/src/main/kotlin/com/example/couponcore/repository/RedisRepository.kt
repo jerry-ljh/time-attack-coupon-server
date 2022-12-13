@@ -9,6 +9,7 @@ class RedisRepository(
     private val redisTemplate: RedisTemplate<String, Any>,
 ) {
     private val objectMapper = jacksonObjectMapper()
+    private val deserializer = redisTemplate.defaultSerializer!!
 
     fun zAdd(key: String, value: Any, score: Double): Boolean? {
         return redisTemplate.opsForZSet().add(key, value, score)
@@ -26,7 +27,7 @@ class RedisRepository(
 
     fun <T : Any> zPopMin(key: String, count: Long, type: Class<T>): Set<T>? {
         return redisTemplate.opsForZSet().popMin(key, count)
-            ?.map { type.cast(it) }
+            ?.map { type.cast(it.value) }
             ?.toSet()
     }
 
