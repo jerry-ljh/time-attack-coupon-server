@@ -25,4 +25,8 @@ class WaitingQueueService(
     fun <T : Any> popQueue(key: String, count: Long, type: Class<T>): Queue<T> {
         return LinkedList(redisRepository.zPopMin(key, count, type) ?: emptySet())
     }
+
+    fun getWaitingOrder(key: String, value: Any): Long? {
+        return redisRepository.zRank(key, value)
+    }
 }

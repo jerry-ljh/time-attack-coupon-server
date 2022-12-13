@@ -2,9 +2,7 @@ package com.example.couponapi.controller
 
 import com.example.couponapi.dto.WaitingQueueRequestDto
 import com.example.couponcore.service.WaitingQueueService
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class WaitingQueueController(
@@ -18,5 +16,13 @@ class WaitingQueueController(
             value = waitingQueueRequestDto.userId
         )
         return result ?: false
+    }
+
+    @GetMapping("/queue")
+    fun getWaitingOrder(
+        @RequestParam(name = "user_id") userId: String,
+        @RequestParam(name = "coupon_title") couponTitle: String
+    ): Long? {
+        return waitingQueueService.getWaitingOrder(key = couponTitle, value = userId)
     }
 }
