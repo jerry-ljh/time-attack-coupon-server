@@ -159,7 +159,7 @@ class CouponIssueServiceTest(
         // when
         couponIssueService.syncCouponIssueStatus(key, userId)
         // then
-        val issuedCouponUserSet = redisTemplate.opsForSet().members(key)!!
+        val issuedCouponUserSet = redisTemplate.opsForSet().members(CouponIssueService.getIssuedCouponSetKey(key))!!
         issuedCouponUserSet.find { it == userId } shouldBe null
     }
 

@@ -12,6 +12,10 @@ class CouponIssueService(
     private val redisRepository: RedisRepository
 ) {
 
+    companion object {
+        fun getIssuedCouponSetKey(key: String) = "${key}_issue_set"
+    }
+
     private val log = LoggerFactory.getLogger(this::class.simpleName)
 
     fun issue(key: String, userId: String) {
@@ -20,7 +24,7 @@ class CouponIssueService(
             waitSeconds = 3,
             leaseSeconds = 3
         ) {
-            markIssueStatus(key, userId)
+            markIssueStatus(getIssuedCouponSetKey(key), userId)
         }
         if (issuable) syncCouponIssueStatus(key, userId)
     }
@@ -56,7 +60,7 @@ class CouponIssueService(
         try {
             userCouponPolicyMappingService.saveUserCouponPolicyMapping(userId, couponTitle)
         } catch (e: Exception) {
-            rollbackIssueMarking(couponTitle, userId)
+            rollbackIssueMarking(getIssuedCouponSetKey(couponTitle), userId)
         }
     }
 }
