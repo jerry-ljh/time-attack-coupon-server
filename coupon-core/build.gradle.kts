@@ -4,6 +4,16 @@ plugins {
     kotlin("kapt")
 }
 
+noArg {
+    annotation("javax.persistence.Entity")
+}
+
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+}
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.redisson:redisson-spring-boot-starter:3.16.4")

@@ -7,7 +7,7 @@ plugins {
     kotlin("plugin.spring") version "1.6.21"
     kotlin("plugin.jpa") version "1.6.21"
     kotlin("kapt") version "1.6.21"
-
+    id("org.jetbrains.kotlin.plugin.noarg") version "1.6.21"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
     id("org.jlleitschuh.gradle.ktlint-idea") version "10.0.0"
 }
@@ -20,6 +20,7 @@ allprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "kotlin-allopen")
     apply(plugin = "kotlin-jpa")
+    apply(plugin = "org.jetbrains.kotlin.plugin.noarg")
 
     ktlint {
         disabledRules.apply {
