@@ -17,13 +17,18 @@ class CouponIssueJobReader(
     private val issuedCouponSetKey = CouponIssueService.getIssuedCouponSetKey(couponPolicyDto.title)
 
     override fun read(): String? {
-        val issuedCouponCount = couponIssueService.getCouponIssueCount(issuedCouponSetKey)
-        val userId = waitingQueueService.popQueue(couponPolicyDto.title, count = 1, String::class.java).firstOrNull()
-        if (issuedCouponCount < totalCouponQuantity && userId == null) {
-            log.info("발급 대상 queue가 비어있습니다. issue status $issuedCouponCount / $totalCouponQuantity")
-            Thread.sleep(1000)
-            return read()
+        while (issuableCouponQuantity()) {
+            val userId =
+                waitingQueueService.popQueue(couponPolicyDto.title, count = 1, String::class.java).firstOrNull()
+            if (userId != null) return userId
+            log.info("발급 대상 queue가 비어있습니다.")
+            Thread.sleep(5000)
         }
-        return userId
+        return null
+    }
+
+    private fun issuableCouponQuantity(): Boolean {
+        val issuedCouponCount = couponIssueService.getCouponIssueCount(issuedCouponSetKey)
+        return issuedCouponCount < totalCouponQuantity
     }
 }
