@@ -11,7 +11,7 @@ class CouponIssueJobWriter(
 
     override fun write(userIdList: MutableList<out String>) {
         userIdList.forEach { userId ->
-            couponIssueService.issue(userId, couponPolicyDto.title)
+            couponIssueService.issue(couponPolicyDto.title, userId)
         }
     }
 }

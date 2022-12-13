@@ -38,7 +38,7 @@ class CouponIssueJobConfiguration(
         val couponPolicyDto = couponPolicyService.findCouponPolicy(couponTitle)
         return stepBuilderFactory["couponIssueStep"]
             .chunk<String, String>(1)
-            .reader(CouponIssueJobReader(waitingQueueService, couponPolicyDto))
+            .reader(CouponIssueJobReader(waitingQueueService, couponIssueService, couponPolicyDto))
             .writer(CouponIssueJobWriter(couponIssueService, couponPolicyDto))
             .throttleLimit(10)
             .taskExecutor(taskExecutor())
