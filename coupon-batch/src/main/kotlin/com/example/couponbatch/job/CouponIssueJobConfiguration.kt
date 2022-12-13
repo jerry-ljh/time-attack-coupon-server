@@ -40,7 +40,7 @@ class CouponIssueJobConfiguration(
             .chunk<String, String>(1)
             .reader(CouponIssueJobReader(waitingQueueService, couponPolicyDto))
             .writer(CouponIssueJobWriter(couponIssueService, couponPolicyDto))
-            .throttleLimit(100)
+            .throttleLimit(10)
             .taskExecutor(taskExecutor())
             .build()
     }
