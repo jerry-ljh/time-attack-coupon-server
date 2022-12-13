@@ -33,14 +33,15 @@ class CouponIssueJobConfiguration(
     @Bean
     @JobScope
     fun couponIssueStep(
-        @Value("#{jobParameters[couponTitle]}") couponTitle: String
+        @Value("#{jobParameters[couponTitle]}") couponTitle: String,
+        @Value("#{jobParameters[threadCount]}") threadCount: Long
     ): Step {
         val couponPolicyDto = couponPolicyService.findCouponPolicy(couponTitle)
         return stepBuilderFactory["couponIssueStep"]
             .chunk<String, String>(1)
             .reader(CouponIssueJobReader(waitingQueueService, couponIssueService, couponPolicyDto))
             .writer(CouponIssueJobWriter(couponIssueService, couponPolicyDto))
-            .throttleLimit(10)
+            .throttleLimit(threadCount.toInt())
             .taskExecutor(taskExecutor())
             .build()
     }

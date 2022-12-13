@@ -16,6 +16,7 @@ class CouponIssueJobConfigurationTest : BatchTestConfig() {
         val jobParameters = JobParametersBuilder()
             .addLong("version", System.currentTimeMillis())
             .addString("couponTitle", "TIME_SALE")
+            .addLong("threadCount", 1)
             .toJobParameters()
         // when
         val result = jobLauncherTestUtils.launchJob(jobParameters)
