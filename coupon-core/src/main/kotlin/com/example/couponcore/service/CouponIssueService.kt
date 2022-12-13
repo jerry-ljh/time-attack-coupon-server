@@ -60,7 +60,9 @@ class CouponIssueService(
     fun syncCouponIssueStatus(couponTitle: String, userId: String) {
         try {
             userCouponPolicyMappingService.saveUserCouponPolicyMapping(userId, couponTitle)
+            log.info("발급 완료 couponTitle: $couponTitle, userId: $userId")
         } catch (e: Exception) {
+            log.error("발급 실패 couponTitle: $couponTitle, userId: $userId", e)
             rollbackIssueMarking(getIssuedCouponSetKey(couponTitle), userId)
         }
     }
