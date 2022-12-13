@@ -1,34 +1,31 @@
 package com.example.couponcore.service
 
 import com.example.couponcore.repository.RedisRepository
+import com.example.couponcore.utils.DistributedLock
 import org.slf4j.LoggerFactory
+import org.springframework.aop.framework.AopContext
 import org.springframework.stereotype.Service
+import java.util.concurrent.TimeUnit
 
 @Service
 class CouponIssueService(
-    private val distributedLockService: DistributedLockService,
     private val userCouponPolicyMappingService: UserCouponPolicyMappingService,
     private val couponPolicyService: CouponPolicyService,
     private val redisRepository: RedisRepository
 ) {
-
     companion object {
         fun getIssuedCouponSetKey(key: String) = "${key}_issue_set"
     }
 
     private val log = LoggerFactory.getLogger(this::class.simpleName)
+    private val self: CouponIssueService by lazy { AopContext.currentProxy() as CouponIssueService }
 
     fun issue(key: String, userId: String) {
-        val issuable = distributedLockService.executeWithLock(
-            lockName = "${key}_issue_lock",
-            waitSeconds = 3,
-            leaseSeconds = 3
-        ) {
-            markIssueStatus(key, userId)
-        }
+        val issuable = self.markIssueStatus(key, userId)
         if (issuable) syncCouponIssueStatus(key, userId)
     }
 
+    @DistributedLock(lockName = "issue_lock", waitTime = 3000, leaseTime = 3000, unit = TimeUnit.MILLISECONDS)
     fun markIssueStatus(key: String, userId: String): Boolean {
         val issuedCouponSetKey = getIssuedCouponSetKey(key)
         if (getCouponIssueCount(issuedCouponSetKey) >= getTotalCouponQuantity(key)) return false
