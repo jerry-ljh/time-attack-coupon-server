@@ -45,3 +45,20 @@ logging:
   level:
     sql:
       debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  redis:
+    port: 6380
+    host: localhost
+  datasource:
+    hikari:
+      jdbc-url: JERRY_MYSQL_URL
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      maximum-pool-size: 50
+      max-lifetime: 30000
+      username: JERRY_MYSQL_URL_USER
+      password: JERRY_MYSQL_URL_PASSWORD

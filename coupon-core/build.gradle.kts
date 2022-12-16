@@ -21,6 +21,8 @@ dependencies {
     api("com.querydsl:querydsl-jpa")
     implementation("com.querydsl:querydsl-apt::jpa")
     implementation("com.querydsl:querydsl-jpa") // 1)
+    implementation("com.amazonaws:aws-java-sdk-ssm")
+    implementation(platform("com.amazonaws:aws-java-sdk-bom:1.11.1034"))
 
     kapt(group = "com.querydsl", name = "querydsl-apt", classifier = "jpa") // 2)
 
