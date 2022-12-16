@@ -16,7 +16,7 @@ import org.springframework.test.context.TestPropertySource
     ]
 
 )
-@TestPropertySource(properties = ["spring.config.name=application,application-domain"])
+@TestPropertySource(properties = ["spring.config.name=application-batch,application-core"])
 @ActiveProfiles("test")
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 class BatchTestConfig {
