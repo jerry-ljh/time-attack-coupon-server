@@ -53,7 +53,7 @@ spring:
       on-profile: prod
   redis:
     port: 6380
-    host: localhost
+    host: JERRY_REDIS_HOST
   datasource:
     hikari:
       jdbc-url: JERRY_MYSQL_URL
