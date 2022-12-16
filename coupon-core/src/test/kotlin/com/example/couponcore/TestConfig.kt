@@ -5,7 +5,7 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.TestConstructor
 import org.springframework.test.context.TestPropertySource
 
-@TestPropertySource(properties = ["spring.config.name=application-domain-test"])
+@TestPropertySource(properties = ["spring.config.name=application-core"])
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @ActiveProfiles("test")
 @SpringBootTest(classes = [CoreConfigurationLoader::class])

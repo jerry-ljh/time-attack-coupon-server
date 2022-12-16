@@ -14,7 +14,7 @@ import kotlin.system.exitProcess
 class CouponBatchApplication
 
 fun main(args: Array<String>) {
-    System.setProperty("spring.config.name", "application,application-domain")
+    System.setProperty("spring.config.name", "application-batch,application-core")
     val exitCode = SpringApplication.exit(runApplication<CouponBatchApplication>(*args))
     exitProcess(exitCode)
 }
