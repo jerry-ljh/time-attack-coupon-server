@@ -36,12 +36,12 @@ class CacheConfiguration(private val redisConnectionFactory: RedisConnectionFact
                             .activateDefaultTyping(
                                 BasicPolymorphicTypeValidator.builder()
                                     .allowIfBaseType(Any::class.java)
-                                    .build(), ObjectMapper.DefaultTyping.EVERYTHING
+                                    .build(),
+                                ObjectMapper.DefaultTyping.EVERYTHING
                             )
 
                     )
                 )
             )
-
     }
 }

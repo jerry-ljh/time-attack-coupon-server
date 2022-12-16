@@ -18,8 +18,6 @@ class UserCouponPolicyMappingRepository(
     override fun setEntityManager(entityManager: EntityManager) {
         super.setEntityManager(entityManager)
     }
-
-
 }
 
 interface UserCouponPolicyMappingJpaRepository : JpaRepository<UserCouponPolicyMapping, Long>
