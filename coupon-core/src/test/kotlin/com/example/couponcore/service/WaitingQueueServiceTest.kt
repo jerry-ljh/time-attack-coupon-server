@@ -23,11 +23,11 @@ class WaitingQueueServiceTest(
     fun `add 요청 순서에 따라서 대기열에 추가한다`() {
         // given
         val key = "test-queue"
-        val value1 = TestUserDto("jerry")
-        val value2 = TestUserDto("tom")
-        val value3 = TestUserDto("may")
-        val value4 = TestUserDto("lon")
-        val value5 = TestUserDto("blue")
+        val value1 = TestUserDto("A")
+        val value2 = TestUserDto("B")
+        val value3 = TestUserDto("C")
+        val value4 = TestUserDto("D")
+        val value5 = TestUserDto("E")
 
         // when
         waitingQueueService.registerQueue(key, value1)

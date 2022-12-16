@@ -4,7 +4,7 @@ import java.time.OffsetDateTime
 import javax.persistence.*
 
 @Entity
-@Table(name = "coupon_policies")
+@Table(name = "coupon_policies", schema = "coupon")
 class CouponPolicy(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long = 0,
     @Column(nullable = false) val title: String,

@@ -1,0 +1,67 @@
+name: Build ecr
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: build docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry-type: private
+
+      - name: Copy docker-compose file
+        run: cp ./tools/docker-compose.yml docker-compose.yml
+
+      - name: Start containers
+        run: docker-compose up -d
+
+      - name: Lint
+        run: ./gradlew ktlintCheck
+
+      - name: Test
+        run: ./gradlew test
+
+      - name: COUPON API (Docker build & Push to ECR)
+        env:
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: api-latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest --build-arg STAGE=prod --build-arg SERVICE_NAME=coupon-api --build-arg TAG=$IMAGE_TAG --build-arg AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY }} --build-arg AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_KEY }} .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: COUPON Batch (Docker build & Push to ECR)
+        env:
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: batch-latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest --build-arg STAGE=prod --build-arg SERVICE_NAME=coupon-batch --build-arg TAG=$IMAGE_TAG --build-arg AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY }} --build-arg AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_KEY }} .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

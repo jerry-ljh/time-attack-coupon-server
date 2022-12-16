@@ -26,6 +26,3 @@ CREATE TABLE `coupon`.`user_coupon_policy_mappings`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
     COMMENT '유저 쿠폰 정책 매핑 정보';
-
-insert into coupon_policies(title, quantity, issued_quantity, date_issue_start, date_issue_end,
-                            date_expire) value ('TIME_SALE', 10000, 0, now(), now() + interval 1 day, now() + interval 1 day)

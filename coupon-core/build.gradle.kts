@@ -1,7 +1,14 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val jar: Jar by tasks
+val bootJar: org.springframework.boot.gradle.tasks.bundling.BootJar by tasks
+
+bootJar.enabled = false
+jar.enabled = true
+
 plugins {
     kotlin("kapt")
+    id("org.flywaydb.flyway") version "7.8.2"
 }
 
 noArg {
@@ -43,4 +50,10 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+flyway {
+    url = "jdbc:mysql://localhost:3306/coupon?useUnicode=yes&characterEncoding=UTF-8&rewriteBatchedStatements=true"
+    user = "jerry"
+    password = "1234"
 }

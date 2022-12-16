@@ -1,5 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val jar: Jar by tasks
+val bootJar: org.springframework.boot.gradle.tasks.bundling.BootJar by tasks
+
+bootJar.enabled = false
+jar.enabled = true
+
 plugins {
     id("org.springframework.boot") version "2.7.7-SNAPSHOT"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
@@ -93,4 +99,8 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    testLogging {
+        showStackTraces = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
 }

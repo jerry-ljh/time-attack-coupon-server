@@ -20,7 +20,7 @@ class DatasourceConfiguration {
     }
 
     @Bean
-    @Profile("test", "local")
+    @Profile("local")
     fun localDataSource(hikariConfig: HikariConfig): DataSource {
         return HikariDataSource(hikariConfig)
     }
