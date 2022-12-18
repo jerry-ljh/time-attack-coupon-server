@@ -18,9 +18,9 @@ class CouponIssueJobWriter(
     override fun write(userIdList: MutableList<out String>) {
         val issuedCouponCount = couponIssueService.getCouponIssueCount(issuedCouponSetKey)
         if (totalCouponQuantity <= issuedCouponCount + userIdList.count()) {
-            issueAsync(userIdList)
+            issueSync(userIdList)
         }
-        issueSync(userIdList)
+        issueAsync(userIdList)
     }
 
     private fun issueAsync(userIds: Collection<String>) {

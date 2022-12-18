@@ -62,6 +62,7 @@ subprojects {
         implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.1")
         testImplementation("io.kotest:kotest-runner-junit5:4.6.3")
         testImplementation("io.kotest:kotest-assertions-core:4.6.3")
+        testImplementation("io.mockk:mockk:1.12.2")
         runtimeOnly("com.h2database:h2")
         runtimeOnly("mysql:mysql-connector-java")
     }
