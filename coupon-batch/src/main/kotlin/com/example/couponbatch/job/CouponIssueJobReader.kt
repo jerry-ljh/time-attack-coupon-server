@@ -18,13 +18,16 @@ class CouponIssueJobReader(
 
     override fun read(): String? {
         while (issuableCouponQuantity()) {
-            val userId =
-                waitingQueueService.popQueue(couponPolicyDto.title, count = 1, String::class.java).firstOrNull()
+            val userId = getUserId()
             if (userId != null) return userId
-            log.info("발급 대상 queue가 비어있습니다.")
-            Thread.sleep(5000)
+            log.info("발급 대기열이 비어있습니다. COUPON_TITLE: ${couponPolicyDto.title}")
+            Thread.sleep(3000)
         }
         return null
+    }
+
+    private fun getUserId(): String? {
+        return waitingQueueService.popQueue(couponPolicyDto.title, count = 1, String::class.java).firstOrNull()
     }
 
     private fun issuableCouponQuantity(): Boolean {

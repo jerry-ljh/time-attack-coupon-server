@@ -38,17 +38,15 @@ class CouponIssueJobConfiguration(
     ): Step {
         val couponPolicyDto = couponPolicyService.findCouponPolicy(couponTitle)
         return stepBuilderFactory["couponIssueStep"]
-            .chunk<String, String>(1)
+            .chunk<String, String>(threadCount.toInt())
             .reader(CouponIssueJobReader(waitingQueueService, couponIssueService, couponPolicyDto))
-            .writer(CouponIssueJobWriter(couponIssueService, couponPolicyDto))
-            .throttleLimit(threadCount.toInt())
-            .taskExecutor(taskExecutor())
+            .writer(CouponIssueJobWriter(couponIssueService, couponPolicyDto, taskExecutor(threadCount.toInt())))
             .build()
     }
 
-    fun taskExecutor(): TaskExecutor {
+    fun taskExecutor(corePoolSize: Int): TaskExecutor {
         val executor = ThreadPoolTaskExecutor()
-        executor.corePoolSize = 300
+        executor.corePoolSize = corePoolSize
         executor.setThreadNamePrefix("CouponIssueJob-")
         executor.initialize()
         return executor
