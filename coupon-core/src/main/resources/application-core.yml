@@ -56,7 +56,7 @@ spring:
     hikari:
       jdbc-url: JERRY_MYSQL_URL
       driver-class-name: com.mysql.cj.jdbc.Driver
-      maximum-pool-size: 50
+      maximum-pool-size: 10
       max-lifetime: 30000
       username: JERRY_MYSQL_URL_USER
       password: JERRY_MYSQL_URL_PASSWORD

@@ -1,4 +1,9 @@
 spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+---
+spring:
   batch:
     job:
       enabled: false

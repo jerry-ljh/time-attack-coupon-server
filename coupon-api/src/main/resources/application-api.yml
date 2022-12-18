@@ -1,4 +1,4 @@
 spring:
-  profiles:
-    include:
-      - core
+  datasource:
+    hikari:
+      maximum-pool-size: 5
