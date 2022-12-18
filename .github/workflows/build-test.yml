@@ -1,0 +1,39 @@
+name: Build Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: build docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Copy docker-compose file
+        run: cp ./tools/docker-compose.yml docker-compose.yml
+
+      - name: Start containers
+        run: docker-compose up -d
+
+      - name: Lint
+        run: ./gradlew ktlintCheck
+
+      - name: Test
+        run: ./gradlew test
+
+      - name: Build without Test, Lint
+        run: ./gradlew clean build -x test -x ktlintCheck
