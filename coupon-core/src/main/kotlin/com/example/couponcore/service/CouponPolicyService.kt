@@ -8,7 +8,6 @@ import org.springframework.aop.framework.AopContext
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.OffsetDateTime
 
 @Service
 class CouponPolicyService(
@@ -24,13 +23,5 @@ class CouponPolicyService(
 
     fun getCouponPolicyProxy(id: Long): CouponPolicy {
         return couponPolicyRepository.getProxy(id)
-    }
-
-    fun isIssuableDate(title: String): Boolean {
-        val couponPolicyDto = self.findCouponPolicy(title)
-        val now = OffsetDateTime.now()
-        val issueStart = couponPolicyDto.dateIssueStart
-        val issueEnd = couponPolicyDto.dateIssueEnd
-        return issueStart <= now && now <= issueEnd
     }
 }

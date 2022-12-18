@@ -13,11 +13,9 @@ class CouponIssueJobReader(
 ) : ItemReader<String> {
 
     private val log = LoggerFactory.getLogger(this::class.simpleName)
-    private val totalCouponQuantity = couponIssueService.getTotalCouponQuantity(couponPolicyDto.title)
-    private val issuedCouponSetKey = CouponIssueService.getIssuedCouponSetKey(couponPolicyDto.title)
 
     override fun read(): String? {
-        while (issuableCouponQuantity()) {
+        while (couponIssueService.issuableCouponQuantity(couponPolicyDto.title)) {
             val userId = getUserId()
             if (userId != null) return userId
             log.info("발급 대기열이 비어있습니다. COUPON_TITLE: ${couponPolicyDto.title}")
@@ -28,10 +26,5 @@ class CouponIssueJobReader(
 
     private fun getUserId(): String? {
         return waitingQueueService.popQueue(couponPolicyDto.title, count = 1, String::class.java).firstOrNull()
-    }
-
-    private fun issuableCouponQuantity(): Boolean {
-        val issuedCouponCount = couponIssueService.getCouponIssueCount(issuedCouponSetKey)
-        return issuedCouponCount < totalCouponQuantity
     }
 }

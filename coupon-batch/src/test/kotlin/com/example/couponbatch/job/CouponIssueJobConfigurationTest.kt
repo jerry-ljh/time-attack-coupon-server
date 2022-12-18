@@ -20,8 +20,8 @@ class CouponIssueJobConfigurationTest(
     fun setCouponPolicy() {
         couponPolicyJpaRepository.save(
             CouponPolicy(
-                title = "TIME_SALE",
-                quantity = 10000,
+                title = "JERRY_SALE_COUPON",
+                quantity = 999,
                 issuedQuantity = 0,
                 dateIssueStart = OffsetDateTime.now(),
                 dateIssueEnd = OffsetDateTime.now().plusDays(3),
@@ -35,8 +35,8 @@ class CouponIssueJobConfigurationTest(
         // given
         val jobParameters = JobParametersBuilder()
             .addLong("version", System.currentTimeMillis())
-            .addString("couponTitle", "TIME_SALE")
-            .addLong("threadCount", 1)
+            .addString("couponTitle", "JERRY_SALE_COUPON")
+            .addLong("threadCount", 10)
             .toJobParameters()
         // when
         val result = jobLauncherTestUtils.launchJob(jobParameters)

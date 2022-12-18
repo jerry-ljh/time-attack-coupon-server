@@ -8,19 +8,14 @@ import com.example.couponcore.repository.RedisRepository
 import com.example.couponcore.service.CouponIssueService
 import com.example.couponcore.service.WaitingQueueService
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.assertTimeoutPreemptively
-import org.opentest4j.AssertionFailedError
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.TestConstructor
 import org.springframework.test.context.TestPropertySource
 import org.springframework.transaction.annotation.Transactional
-import java.time.Duration
 import java.time.OffsetDateTime
 
 @ActiveProfiles("test")
@@ -70,19 +65,6 @@ class CouponIssueJobReaderTest(
         val result = reader.read()
         // then
         result shouldBe null
-    }
-
-    @Test
-    fun `read 발급할 쿠폰 수량이 남아있고 대기열이 비어있다면 대기한다`() {
-        // given
-        val reader = reader(TEST_COUPON, quantity = 3)
-        // when & then
-        val result = assertThrows<AssertionFailedError> {
-            assertTimeoutPreemptively(Duration.ofSeconds(3)) {
-                reader.read()
-            }
-        }
-        result.message shouldContain "execution timed out"
     }
 
     private fun reader(title: String, quantity: Long): CouponIssueJobReader {
