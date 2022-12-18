@@ -165,15 +165,38 @@ class CouponIssueServiceTest(
         issuedCouponUserSet.find { it == userId } shouldBe null
     }
 
-    private fun saveCouponPolicy(title: String, quantity: Long): CouponPolicy {
+    @Test
+    fun `issue 쿠폰 발급 기간이 아니라면 발행하지 않는다`() {
+        // given
+        val key = "TEST_COUPON_TITLE"
+        val userId = "jerry"
+        saveCouponPolicy(
+            title = key,
+            quantity = 100,
+            dateIssueStart = OffsetDateTime.now().minusDays(1),
+            dateIssueEnd = OffsetDateTime.now().minusMinutes(1)
+        )
+        // when
+        couponIssueService.issue(key, userId)
+        // then
+        val issuedCouponUserSet = redisTemplate.opsForSet().members(key)!!
+        issuedCouponUserSet shouldHaveSize 0
+    }
+
+    private fun saveCouponPolicy(
+        title: String,
+        quantity: Long,
+        dateIssueStart: OffsetDateTime = OffsetDateTime.now(),
+        dateIssueEnd: OffsetDateTime = OffsetDateTime.now().plusDays(3)
+    ): CouponPolicy {
         return couponPolicyRepository.save(
             CouponPolicy(
                 title = title,
                 quantity = quantity,
                 issuedQuantity = 0,
-                dateIssueStart = OffsetDateTime.now(),
-                dateIssueEnd = OffsetDateTime.now().plusDays(5),
-                dateExpire = OffsetDateTime.now().plusDays(5)
+                dateIssueStart = dateIssueStart,
+                dateIssueEnd = dateIssueEnd,
+                dateExpire = dateIssueEnd
             )
         )
     }

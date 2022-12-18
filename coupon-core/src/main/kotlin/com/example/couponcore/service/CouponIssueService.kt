@@ -21,7 +21,7 @@ class CouponIssueService(
     private val self: CouponIssueService by lazy { AopContext.currentProxy() as CouponIssueService }
 
     fun issue(key: String, userId: String) {
-        val issuable = self.markIssueStatus(key, userId)
+        val issuable = couponPolicyService.isIssuableDate(key) && self.markIssueStatus(key, userId)
         if (issuable) syncCouponIssueStatus(key, userId)
     }
 
