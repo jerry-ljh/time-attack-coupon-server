@@ -31,11 +31,12 @@ class TestRunner {
     public static Map<String, String> headers = [:]
     public static List<Cookie> cookies = []
     public static COUPON_TITLE = "TIME_SALE"
+    public static SERVER_IP = "127.0.0.1"
 
     @BeforeProcess
     public static void beforeProcess() {
         HTTPRequestControl.setConnectionTimeout(300000)
-        test = new GTest(1, "127.0.0.1")
+        test = new GTest(1, SERVER_IP)
         request = new HTTPRequest()
 
         // Set header data
@@ -63,7 +64,7 @@ class TestRunner {
         long currentTime = (new Date()).getTime()
         params.put("user_id", "user_" + currentTime)
         params.put("coupon_title", COUPON_TITLE)
-        HTTPResponse response = request.POST("http://127.0.0.1:8080/queue", params)
+        HTTPResponse response = request.POST("http://$SERVER_IP:8080/queue", params)
 
         if (response.statusCode == 301 || response.statusCode == 302) {
             grinder.logger.warn("Warning. The response may not be correct. The response code was {}.", response.statusCode)
